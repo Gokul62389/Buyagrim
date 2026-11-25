@@ -15,7 +15,7 @@ const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
     tabs.forEach((t, k) => t.setAttribute('aria-selected', k === i));
     now.textContent = String(i + 1).padStart(2, '0');
   };
-  const play = () => { clearInterval(timer); card.classList.remove('paused', 'run'); void card.offsetWidth; if (!reduced()) card.classList.add('run'), timer = setInterval(() => go(i + 1), 7000); };
+  const play = () => { clearInterval(timer); card.classList.remove('paused', 'run'); void card.offsetWidth; if (!reduced()) card.classList.add('run'), timer = setInterval(() => go(i + 1), 5000); };
   tabs.forEach((t, k) => t.addEventListener('click', () => { go(k); play(); }));
   // the card fills the viewport, so pausing on hover would stop it almost always; pause only while keyboard focus is inside
   const pause = () => { clearInterval(timer); card.classList.add('paused'); };

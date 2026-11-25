@@ -19,9 +19,9 @@ const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   tabs.forEach((t, k) => t.addEventListener('click', () => { go(k); play(); }));
   $('.next').addEventListener('click', () => { go(i + 1); play(); });
   const card = $('.hero-card');
-  card.addEventListener('mouseenter', () => clearInterval(timer));
-  card.addEventListener('mouseleave', play);
-  card.addEventListener('focusin', () => clearInterval(timer));
+  // the card fills the viewport, so pausing on hover would stop it almost always; pause only while keyboard focus is inside
+  card.addEventListener('focusin', e => e.target.matches(':focus-visible') && clearInterval(timer));
+  card.addEventListener('focusout', play);
   document.addEventListener('visibilitychange', () => document.hidden ? clearInterval(timer) : play());
   play();
 })();

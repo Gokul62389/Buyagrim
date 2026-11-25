@@ -120,6 +120,12 @@ ul{margin:0;padding:0;list-style:none}
 .bars{display:flex;gap:6px}
 .bars button{width:24px;height:4px;border-radius:4px;background:rgba(255,255,255,.3);position:relative;transition:width .5s var(--ease),background .3s}
 .bars button[aria-selected=true]{width:64px;background:var(--red)}
+.bars button[aria-selected=true]{background:rgba(255,255,255,.3);overflow:hidden}
+.bars button[aria-selected=true]::before{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--red);transform-origin:left}
+.hero-card.run .bars button[aria-selected=true]::before{animation:bar-fill 7s linear both}
+.hero-card.paused .bars button::before{animation-play-state:paused}
+@keyframes bar-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.bars button[aria-selected=true]::before{animation:none}}
 .bars button::after{content:"";position:absolute;inset:-20px -3px}
 .next{position:absolute;z-index:3;right:56px;bottom:48px;display:flex;align-items:center;gap:10px;padding:12px 12px 12px 18px;border-radius:16px;font:500 14px/1 var(--f-d);color:#fff;transition:background .3s}
 .next:hover{background:rgba(255,255,255,.18)}

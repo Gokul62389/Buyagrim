@@ -8,19 +8,20 @@ const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const slides = $$('.slide'), tabs = $$('.bars button'), now = $('.pager .now');
   if (slides.length < 2) return;
   let i = 0, timer = 0;
+  const card = $('.hero-card');
   const go = n => {
     i = (n + slides.length) % slides.length;
     slides.forEach((s, k) => { s.classList.toggle('is-on', k === i); s.toggleAttribute('inert', k !== i); });
     tabs.forEach((t, k) => t.setAttribute('aria-selected', k === i));
     now.textContent = String(i + 1).padStart(2, '0');
   };
-  const play = () => { clearInterval(timer); if (!reduced()) timer = setInterval(() => go(i + 1), 7000); };
+  const play = () => { clearInterval(timer); card.classList.remove('paused', 'run'); void card.offsetWidth; if (!reduced()) card.classList.add('run'), timer = setInterval(() => go(i + 1), 7000); };
   tabs.forEach((t, k) => t.addEventListener('click', () => { go(k); play(); }));
-  const card = $('.hero-card');
   // the card fills the viewport, so pausing on hover would stop it almost always; pause only while keyboard focus is inside
-  card.addEventListener('focusin', e => e.target.matches(':focus-visible') && clearInterval(timer));
+  const pause = () => { clearInterval(timer); card.classList.add('paused'); };
+  card.addEventListener('focusin', e => e.target.matches(':focus-visible') && pause());
   card.addEventListener('focusout', play);
-  document.addEventListener('visibilitychange', () => document.hidden ? clearInterval(timer) : play());
+  document.addEventListener('visibilitychange', () => document.hidden ? pause() : (go(i), play()));
   play();
 })();
 
